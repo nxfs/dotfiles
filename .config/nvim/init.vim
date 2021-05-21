@@ -33,6 +33,9 @@ Plug 'junegunn/fzf.vim'
 Plug 'mattn/vim-lsp-settings'
 Plug 'prabirshrestha/vim-lsp'
 
+" async tasks
+Plug 'skywind3000/asyncrun.vim'
+
 " initialize plugin system
 call plug#end()
 
@@ -55,7 +58,7 @@ function! s:on_lsp_buffer_enabled() abort
     inoremap <buffer> <expr><c-d> lsp#scroll(-4)
 
     let g:lsp_format_sync_timeout = 1000
-    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
+    autocmd! BufWritePre *.rs call execute('LspDocumentFormatSync')
 
     nmap <buffer> <C-]> :LspDefinition<CR>
 
@@ -94,8 +97,27 @@ if has("cscope")
     	nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
     	nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 
+	" ctrl s as global symbol search
 	nmap <C-s> :cs find s<Space>
+
+	" auto refresh on save
+	autocmd! BufWritePre *.c,*.h,*.cpp,*.hpp :call g:CscopeUpdate(".", "cscope.out")
 endif
+
+function! g:CscopeDone()
+	silent exec "cs add ".fnameescape(g:asyncrun_text)
+endfunc
+
+function! g:CscopeUpdate(workdir, cscopeout)
+	let l:cscopeout = fnamemodify(a:cscopeout, ":p")
+	let l:cscopeout = fnameescape(l:cscopeout)
+	let l:workdir = (a:workdir == '')? '.' : a:workdir
+	try | exec "cs kill ".l:cscopeout | catch | endtry
+	exec "AsyncRun -post=call\\ g:CscopeDone() ".
+				\ "-text=".l:cscopeout." "
+				\ "-cwd=".fnameescape(l:workdir)." ".
+				\ "cscope -bcqR -f ".l:cscopeout
+endfunc
 
 " alt up/down to move a line up/down
 nnoremap <A-down> :m .+1<CR>==
