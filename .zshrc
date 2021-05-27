@@ -182,6 +182,16 @@ then
 	fi
 fi
 
+# add our tools
+export DOTFILE_BIN_PATH=$DOTFILE_BASE_PATH/bin
+export PATH=$PATH:$DOTFILE_BIN_PATH
+alias c=". c"
+alias gg="$DOTFILE_BIN_PATH/gg"
+
+# util to get a script directory
+export SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+# load extensions
 ZSH_EXT_CONFIG="$HOME/.zshrc.ext"
 if [ -f $ZSH_EXT_CONFIG ];
 then
