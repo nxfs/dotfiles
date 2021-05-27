@@ -187,6 +187,7 @@ export DOTFILE_BIN_PATH=$DOTFILE_BASE_PATH/bin
 export PATH=$PATH:$DOTFILE_BIN_PATH
 alias c=". c"
 alias gg="$DOTFILE_BIN_PATH/gg"
+export C_TOOL_CFG_PATH=$HOME/.c.cfg
 
 # util to get a script directory
 export SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"

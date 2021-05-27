@@ -147,7 +147,7 @@ def config_help
 end
 
 def config_path
-  File.join Dir.home, ".c.cfg"
+  "#{ENV["C_TOOL_CFG_PATH"]}"
 end
 
 # Print out the relevant output.
