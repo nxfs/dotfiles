@@ -18,7 +18,7 @@ if [ $number_of_matches -eq 0 ]; then
 elif [ $number_of_matches -eq 1 ]; then
   file_to_vim=$files;
 elif [ $number_of_matches -gt 99 ]; then
-  git grep -iPn "$@";
+  git grep -iIPn "$@";
   exit;
 else
   i=0;
