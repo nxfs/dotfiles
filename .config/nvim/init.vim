@@ -31,13 +31,22 @@ Plug 'junegunn/fzf.vim'
 
 " language server
 Plug 'mattn/vim-lsp-settings'
+Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'keremc/asyncomplete-racer.vim'
 
 " async tasks
 Plug 'skywind3000/asyncrun.vim'
 
+" debugger
+Plug 'puremourning/vimspector', { 'do': { -> :VimspectorUpdate } }
+
 " initialize plugin system
 call plug#end()
+
+" debugger config
+let g:vimspector_enable_mappings = 'HUMAN'
 
 " lsp shortcuts
 function! s:on_lsp_buffer_enabled() abort
@@ -70,6 +79,11 @@ augroup lsp_install
     " call s:on_lsp_buffer_enabled only for languages that has the server registered.
    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
+
+" autocomplete
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 
 " remamp ctrl+p (open file) and ctrl+e (recent files) to fzf
 nmap <C-p> :FZF<CR>
@@ -134,3 +148,6 @@ cnoremap <expr> <down> wildmenumode() ? "\<right>" : "\<down>"
 cnoremap <expr> <left> wildmenumode() ? "\<up>" : "\<left>"
 cnoremap <expr> <right> wildmenumode() ? " \<bs>\<C-Z>" : "\<right>"
 set wildmode=longest:full
+
+" auto indent on paste
+:nnoremap p ]p
