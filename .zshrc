@@ -181,3 +181,9 @@ then
 		fi
 	fi
 fi
+
+ZSH_EXT_CONFIG="$HOME/.zshrc.ext"
+if [ -f $ZSH_EXT_CONFIG ];
+then
+	source $ZSH_EXT_CONFIG
+fi
