@@ -121,3 +121,63 @@ gsettings set org.gnome.settings-daemon.plugins.orientation active false
 
 export EDITOR='nvim'
 export VISUAL='nvim'
+
+# make sure we have an ssh agent
+if [ -z "$SSH_AGENT_PID" ]
+then
+	echo "SSH agent PID is not defined"
+
+	# we could just start a new agent but we try to be more clever and identify any ssh agent launched by a previous shell
+
+	AGENT_SOCKET=$HOME/.ssh/.ssh-agent-socket
+	AGENT_INFO=$HOME/.ssh/.ssh-agent-info
+	SCSSH_AGENT=/usr/bin
+
+	if [[ -s "$AGENT_INFO" ]]
+	then
+		source $AGENT_INFO
+	fi
+
+	other=0
+	if [[ -z "$SSH_AGENT_PID" ]]
+	then
+		running=0
+	else
+		running=0
+		for u in `pgrep ssh-agent`
+		do
+			if [[ "$running" != "1" ]]
+			then
+				if [[ "$SSH_AGENT_PID" != "$u" ]]
+				then
+					running=2
+					other=$u
+				else
+					running=1
+					echo "Agent $u Already Running"
+				fi
+			fi
+		done
+	fi
+
+	if [[ "$running" != "1" ]]
+	then
+		echo "Re-starting Agent"
+		killall -15 ssh-agent
+		echo "rm $AGENT_SOCKET"
+		eval `rm $AGENT_SOCKET`
+		echo "$SCSSH_AGENT/ssh-agent -s -a $AGENT_SOCKET"
+		eval `$SCSSH_AGENT/ssh-agent -s -a $AGENT_SOCKET`
+		echo "export SSH_AGENT_PID=$SSH_AGENT_PID" > $AGENT_INFO
+		echo "export SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> $AGENT_INFO
+		ssh-add
+	elif [[ "$other" != "0" ]]
+	then
+		if ps -p $other|grep $other|grep defunct >/dev/null
+		then
+			echo "DEFUNCT process $other is still running"
+		else
+			echo "WARNING!! non defunct process $other is still running"
+		fi
+	fi
+fi
