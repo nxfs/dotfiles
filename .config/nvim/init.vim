@@ -30,23 +30,30 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 " language server
-Plug 'mattn/vim-lsp-settings'
-Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
-Plug 'keremc/asyncomplete-racer.vim'
 
 " async tasks
 Plug 'skywind3000/asyncrun.vim'
 
 " debugger
-Plug 'puremourning/vimspector', { 'do': { -> :VimspectorUpdate } }
+Plug 'puremourning/vimspector'
 
 " initialize plugin system
 call plug#end()
 
 " debugger config
 let g:vimspector_enable_mappings = 'HUMAN'
+
+" rust lsp config
+if executable('rust-analyzer')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'rust-analyzer',
+        \ 'cmd': {server_info->['rust-analyzer']},
+        \ 'allowlist': ['rust'],
+        \ })
+endif
 
 " lsp shortcuts
 function! s:on_lsp_buffer_enabled() abort
@@ -118,6 +125,7 @@ if has("cscope")
 	autocmd! BufWritePre *.c,*.h,*.cpp,*.hpp :call g:CscopeUpdate(".", "cscope.out")
 endif
 
+" async run command to re-index cscope
 function! g:CscopeDone()
 	silent exec "cs add ".fnameescape(g:asyncrun_text)
 endfunc
