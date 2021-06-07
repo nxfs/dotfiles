@@ -55,6 +55,15 @@ if executable('rust-analyzer')
         \ })
 endif
 
+" c/cpp lsp config
+if executable('clangd') && filereadable("compile_commands.json")
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'clangd',
+        \ 'cmd': {server_info->['clangd']},
+        \ 'allowlist': ['c', 'cpp'],
+        \ })
+endif
+
 " lsp shortcuts
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
