@@ -33,6 +33,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'mattn/vim-lsp-settings'
 
 " async tasks
 Plug 'skywind3000/asyncrun.vim'
@@ -82,10 +83,13 @@ function! s:on_lsp_buffer_enabled() abort
     inoremap <buffer> <expr><c-f> lsp#scroll(+4)
     inoremap <buffer> <expr><c-d> lsp#scroll(-4)
 
+    " autoformat rust
     let g:lsp_format_sync_timeout = 1000
     autocmd! BufWritePre *.rs call execute('LspDocumentFormatSync')
 
+    " ctags/cscope like mappings
     nmap <buffer> <C-]> :LspDefinition<CR>
+    nmap <buffer> <C-\>s :LspReferences<CR>
 
     " refer to doc to add more commands
 endfunction
@@ -95,6 +99,10 @@ augroup lsp_install
     " call s:on_lsp_buffer_enabled only for languages that has the server registered.
    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
+
+" sincs lsp uses quick fix to display list of choices, close quick fix after
+" selecting an entry
+:autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
 
 " autocomplete
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
