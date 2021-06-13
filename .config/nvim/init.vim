@@ -110,7 +110,11 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 
 " remamp ctrl+p (open file) and ctrl+e (recent files) to fzf
-nmap <C-p> :FZF<CR>
+if (isdirectory(".git"))
+	nmap <C-p> :GFiles<CR>
+else
+	nmap <C-p> :FZF<CR>
+endif
 nmap <C-e> :History<CR>
 
 " cscope
