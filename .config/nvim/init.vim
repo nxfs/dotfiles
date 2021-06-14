@@ -67,6 +67,11 @@ endif
 
 " lsp shortcuts
 function! s:on_lsp_buffer_enabled() abort
+    if (filereadable(".lspdisable"))
+	:call lsp#disable_diagnostics_for_buffer()
+	return
+    endif
+
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
@@ -87,9 +92,8 @@ function! s:on_lsp_buffer_enabled() abort
     let g:lsp_format_sync_timeout = 1000
     autocmd! BufWritePre *.rs call execute('LspDocumentFormatSync')
 
-    " ctags/cscope like mappings
+    " ctags like mappings
     nmap <buffer> <C-]> :LspDefinition<CR>
-    nmap <buffer> <C-\>s :LspReferences<CR>
 
     " refer to doc to add more commands
 endfunction
@@ -130,6 +134,10 @@ if has("cscope")
 	    silent cs add $CSCOPE_DB
 	endif
 
+        " lsp-like mappings
+        nmap gd :cs find g <C-R>=expand("<cword>")<CR><CR>
+        nmap gr :cs find s <C-R>=expand("<cword>")<CR><CR>
+
 	nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
 	nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
     	nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
@@ -138,9 +146,6 @@ if has("cscope")
     	nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
     	nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
     	nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
-
-	" ctrl s as global symbol search
-	nmap <C-s> :cs find s<Space>
 
 	" auto refresh on save
 	autocmd! BufWritePre *.c,*.h,*.cpp,*.hpp :call g:CscopeUpdate(".", "cscope.out")
