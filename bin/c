@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 # Intelligently cd to project or shortcut. Will cd further into the project
 # depending on the uniqueness and presence of certain folders. Shortcuts are
@@ -9,7 +9,7 @@ DOTFILE_C_RB=$DOTFILE_BASE_PATH/lib/c.rb
 if [ $# -gt 0 ]; then
   if [[ "$1" == "edit" ]]; then
     ruby $DOTFILE_C_RB touch-config
-    vim ~/.c.cfg
+    $EDITOR $C_TOOL_CFG_PATH
   elif [[ "$1" == "list" ]]; then
     ruby $DOTFILE_C_RB list
   else
