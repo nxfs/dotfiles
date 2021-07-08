@@ -76,8 +76,8 @@ function! s:on_lsp_buffer_enabled() abort
     setlocal signcolumn=yes
     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
     nmap <buffer> gd <plug>(lsp-definition)
-    nmap <buffer> gs <plug>(lsp-document-symbol-search)
-    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> gs <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> gS <plug>(lsp-document-symbol-search)
     nmap <buffer> gr <plug>(lsp-references)
     nmap <buffer> gi <plug>(lsp-implementation)
     nmap <buffer> gt <plug>(lsp-type-definition)
@@ -137,6 +137,8 @@ if has("cscope")
         " lsp-like mappings
         nmap gd :cs find g <C-R>=expand("<cword>")<CR><CR>
         nmap gr :cs find s <C-R>=expand("<cword>")<CR><CR>
+	nmap gD :cs find g<Space>
+	nmap gs :cs find s<Space>
 
 	nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
 	nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
