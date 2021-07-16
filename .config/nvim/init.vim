@@ -35,9 +35,6 @@ Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'mattn/vim-lsp-settings'
 
-" async tasks
-Plug 'skywind3000/asyncrun.vim'
-
 " debugger
 Plug 'puremourning/vimspector'
 
@@ -148,28 +145,8 @@ if has("cscope")
     	nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
     	nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
     	nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
-
-	" auto refresh on save
-	autocmd! BufWritePre *.c,*.h,*.cpp,*.hpp :call g:CscopeUpdate(".", "cscope.out")
 endif
 
-" async run command to re-index cscope
-function! g:CscopeDone()
-	silent exec "cs add ".fnameescape(g:asyncrun_text)
-endfunc
-
-function! g:CscopeUpdate(workdir, cscopeout)
-	let l:cscopeout = fnamemodify(a:cscopeout, ":p")
-	let l:cscopeout = fnameescape(l:cscopeout)
-	let l:workdir = (a:workdir == '')? '.' : a:workdir
-	try | exec "cs kill ".l:cscopeout | catch | endtry
-	exec "AsyncRun -post=call\\ g:CscopeDone() ".
-				\ "-text=".l:cscopeout." "
-				\ "-cwd=".fnameescape(l:workdir)." ".
-				\ "cscope -bcqR -f ".l:cscopeout
-endfunc
-
-" alt up/down to move a line up/down
 nnoremap <A-down> :m .+1<CR>==
 nnoremap <A-up> :m .-2<CR>==
 inoremap <A-down> <Esc>:m .+1<CR>==gi
