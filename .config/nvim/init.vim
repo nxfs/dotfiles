@@ -167,3 +167,7 @@ set wildmode=longest:full
 
 " auto indent on paste
 :nnoremap p ]p
+
+" load local .nvimrc
+set exrc
+set secure
