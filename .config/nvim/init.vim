@@ -38,6 +38,9 @@ Plug 'mattn/vim-lsp-settings'
 " debugger
 Plug 'puremourning/vimspector'
 
+" typescript highlight
+Plug 'leafgarland/typescript-vim'
+
 " initialize plugin system
 call plug#end()
 
