@@ -1,6 +1,5 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
@@ -67,7 +66,6 @@ plugins=(
 )
 
 source $ZSH/oh-my-zsh.sh
-
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -117,7 +115,7 @@ bindkey -v
 bindkey '^r' history-incremental-search-backward
 
 # remove auto rotation of screen
-gsettings set org.gnome.settings-daemon.plugins.orientation active false
+gsettings set org.gnome.settings-daemon.plugins.orientation active false &> /dev/null # will be error if headless
 
 export EDITOR='nvim'
 export VISUAL='nvim'
@@ -181,6 +179,8 @@ then
 		fi
 	fi
 fi
+
+export PATH=$PATH:~/.local/bin
 
 # add our tools
 export DOTFILE_BIN_PATH=$DOTFILE_BASE_PATH/bin
