@@ -5,7 +5,7 @@
 # preferred over projects. Combine multiple args to continue traversing down
 # the folder hierarchy. Add "." to pick the first folder in the directory.
 # Usage: c [edit|list|.|<shortcut prefix or /pattern/>|<project prefix or /pattern/ or pattern>]
-DOTFILE_C_RB=$DOTFILE_BASE_PATH/lib/c.rb
+DOTFILE_C_RB=${0:a:h}/../lib/c.rb
 if [ $# -gt 0 ]; then
   if [[ "$1" == "edit" ]]; then
     ruby $DOTFILE_C_RB touch-config

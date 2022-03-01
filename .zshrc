@@ -183,9 +183,9 @@ fi
 export PATH=$PATH:~/.local/bin
 
 # add our tools
-export DOTFILE_BIN_PATH=$DOTFILE_BASE_PATH/bin
+export DOTFILE_BIN_PATH=${0:a:h}/bin
 export PATH=$PATH:$DOTFILE_BIN_PATH
-alias c=". c"
+alias c=". $DOTFILE_BIN_PATH/c"
 alias gg="$DOTFILE_BIN_PATH/gg"
 export C_TOOL_CFG_PATH=$HOME/.c.cfg
 
