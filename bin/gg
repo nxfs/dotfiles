@@ -3,7 +3,7 @@
 # and it will open up vim to the matching line. Also, all matches are case-insensitive and use perl regex.
 # Usage: gg <regex>
 
-matches=`git grep -iIPn "$@"`;
+matches=`git grep -iIPn "$@" -- ':(exclude)*.qcow2'`;
 files=`echo "${matches}" | perl -nle'print $& if m{^[^:]*\:\d+\:}'`;
 number_of_matches=`echo "${files}" | wc -l`;
 file_to_vim="";
